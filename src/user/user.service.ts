@@ -6,7 +6,7 @@ export class UserService {
     constructor() {}
 
     async hello() {
-        return "Hello, World!"
+        return "Hello, World! Congratulations with PR!"
     }
 }
 
