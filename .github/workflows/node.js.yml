@@ -4,15 +4,13 @@ on: [push]
 jobs:
   init:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-varsion: ['14.x', '16.x', '18.x']
 
     steps:
       - uses: actions/checkout@v4
       - name: Starting node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
-        with: ${{ matrix.node-version }}
+        with: 
+          node-version: '18.x'
       - name: install modules
         run: npm install
       - name: build project
