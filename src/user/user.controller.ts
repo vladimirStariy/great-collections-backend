@@ -6,8 +6,8 @@ export class UserController {
 
     constructor(private userService: UserService) {}
 
-    @Get('/user')
-    getPersons() {
-        return this.userService.hello();
+    @Get('/users')
+    getUsers() {
+        return this.userService.get();
     }
 }
