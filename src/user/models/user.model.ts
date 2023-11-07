@@ -19,4 +19,7 @@ export class User extends Model<User, IUserCreationModel> {
     
     @Column({type: DataType.BOOLEAN, defaultValue: false})
     isBanned: boolean;
+
+    @Column({type: DataType.BOOLEAN, defaultValue: false})
+    isAdmin: boolean;
 }
