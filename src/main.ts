@@ -19,7 +19,7 @@ async function start() {
     app.use(cookieParser());
 
     app.enableCors({
-        origin: 'https://great-collections-front.vercel.app',
+        origin: process.env.FRONT_ORIGIN,
         credentials: true,
     });
 
