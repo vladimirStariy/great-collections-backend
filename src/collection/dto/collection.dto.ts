@@ -17,5 +17,10 @@ export interface CreateCollectionItemRequestDto {
     name: string;
     tags: number[];
     collectionId: number;
-    data: any;
+    data: any[];
+}
+
+export interface GetCollectionsRequestDto {
+    page: number;
+    recordsCount: number;
 }

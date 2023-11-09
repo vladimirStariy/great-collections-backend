@@ -12,8 +12,14 @@ export class CollectionController {
         await this.collectionService.createCollection(collectionDto);
     }
 
-    @Post('create-collection-item')
+    @Post('/create-collection-item')
     async createCollectionItem(@Body() collectionItemDto: CreateCollectionItemRequestDto) {
         await this.collectionService.createCollectionItem(collectionItemDto);
+    }
+
+    @Get('/collections')
+    async getCollections() {
+        const response = await this.collectionService.getCollectionsWithPagination();
+        return response;
     }
 }

@@ -2,8 +2,14 @@ import { DataType, Model, Table, Column, AllowNull, BelongsToMany, HasMany, Fore
 import { CollectionItem } from "./collection.item";
 import { CollectionField } from "./collection.field";
 
+export interface CollectionFieldValueCreationAttributes {
+    collectionFieldId: number;
+    collectionItemId: number;
+    value: any;
+}
+
 @Table({tableName: 'collection-field-values'})
-export class CollectionFieldValue extends Model<CollectionFieldValue> {
+export class CollectionFieldValue extends Model<CollectionFieldValue, CollectionFieldValueCreationAttributes> {
     
     @Column({type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true})
     id: number;

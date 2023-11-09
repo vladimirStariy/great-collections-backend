@@ -4,7 +4,7 @@ import { Collection } from './models/collection.model';
 import { CollectionFieldDto, CreateCollectionItemRequestDto, CreateCollectionRequestDto } from './dto/collection.dto';
 import { CollectionField } from './models/collection.field';
 import { CollectionItem } from './models/collection.item';
-import { CollectionFieldValue } from './models/collection.field.value';
+import { CollectionFieldValue, CollectionFieldValueCreationAttributes } from './models/collection.field.value';
 
 @Injectable()
 export class CollectionService {
@@ -27,18 +27,29 @@ export class CollectionService {
             name: collectionItemDto.name, 
             collection_id: collectionItemDto.collectionId
         });
-        await this.createCollectionItemFieldsValues(collectionItemDto);
+        await this.createCollectionItemFieldsValues(collectionItemDto.collectionId, created.id, collectionItemDto.data);
     }
 
+    async getCollectionsWithPagination() {
+        const collections = await this.collectionRepository.findAll();
+        return collections;
+    }
+
+    private async createCollectionItemFieldsValues(collectionId: number, collectionItemId: number, data: any[]) {
+        const fields = await this.getCollectionFields(collectionId);
+        let arr: CollectionFieldValueCreationAttributes[] = [];
+        fields.map((item, index) => arr.push({
+            collectionFieldId: item.id, 
+            collectionItemId: collectionItemId, 
+            value: data[index]
+        }))
+        await this.collectionFieldValuesRepository.bulkCreate(arr);      
+    }
+    
     private async createCollectionFields(fields: CollectionFieldDto[]) {
         await this.collectionFieldRepository.bulkCreate(fields);
     }
-
-    private async createCollectionItemFieldsValues(collectionItemDto: CreateCollectionItemRequestDto) {
-        const fields = await this.getCollectionFields(collectionItemDto.collectionId);
-        
-    }
-
+    
     private async getCollectionFields(collectionId: number) {
         const collectionFields = await this.collectionFieldRepository.findAll({
             where: {
@@ -47,6 +58,5 @@ export class CollectionService {
         })
         return collectionFields;
     } 
-
 }
 
