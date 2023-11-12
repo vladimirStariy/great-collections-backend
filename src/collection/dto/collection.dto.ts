@@ -7,6 +7,13 @@ export interface CreateCollectionRequestDto {
     fields: CollectionFieldDto[]
 }
 
+export class CollectionRecordDto {
+    id: number;
+    name: string;
+    theme: string;
+    itemsQuantity: number;
+}
+
 export interface CollectionFieldDto {
     name: string;
     data_type: string;

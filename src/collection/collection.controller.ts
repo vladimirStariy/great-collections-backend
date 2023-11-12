@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, UseGuards, UsePipes } from '@nestjs/common';
 import { CollectionService } from './collection.service';
-import { CreateCollectionItemRequestDto, CreateCollectionRequestDto } from './dto/collection.dto';
+import { CreateCollectionItemRequestDto, CreateCollectionRequestDto, GetCollectionsRequestDto } from './dto/collection.dto';
 
 @Controller('')
 export class CollectionController {
@@ -17,9 +17,9 @@ export class CollectionController {
         await this.collectionService.createCollectionItem(collectionItemDto);
     }
 
-    @Get('/collections')
-    async getCollections() {
-        const response = await this.collectionService.getCollectionsWithPagination();
+    @Post('/collections')
+    async getCollections(@Body() dto: GetCollectionsRequestDto) {
+        const response = await this.collectionService.getCollectionsWithPagination(dto);
         return response;
     }
 }

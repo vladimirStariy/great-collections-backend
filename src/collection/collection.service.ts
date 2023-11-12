@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Collection } from './models/collection.model';
-import { CollectionFieldDto, CreateCollectionItemRequestDto, CreateCollectionRequestDto } from './dto/collection.dto';
+import { CollectionFieldDto, CollectionRecordDto, CreateCollectionItemRequestDto, CreateCollectionRequestDto, GetCollectionsRequestDto } from './dto/collection.dto';
 import { CollectionField } from './models/collection.field';
 import { CollectionItem } from './models/collection.item';
 import { CollectionFieldValue, CollectionFieldValueCreationAttributes } from './models/collection.field.value';
@@ -29,12 +29,20 @@ export class CollectionService {
         });
         await this.createCollectionItemFieldsValues(collectionItemDto.collectionId, created.id, collectionItemDto.data);
     }
-
-    async getCollectionsWithPagination() {
-        const collections = await this.collectionRepository.findAll();
-        return collections;
+    
+    async getCollectionsWithPagination(dto: GetCollectionsRequestDto) {
+        const _offset = (dto.page - 1) * dto.recordsCount;
+        const _collections = this.collectionRepository.findAndCountAll({
+            offset: _offset,
+            limit: dto.recordsCount,
+            include: [{ model: CollectionItem }]
+        })
+        const rawCollections = (await _collections).rows;
+        const collectionRecordDto: CollectionRecordDto[] = []; 
+        rawCollections.forEach(item => collectionRecordDto.push({id: item.id, name: item.name, theme: item.theme, itemsQuantity: item.items.length}))
+        return collectionRecordDto;
     }
-
+    
     private async createCollectionItemFieldsValues(collectionId: number, collectionItemId: number, data: any[]) {
         const fields = await this.getCollectionFields(collectionId);
         let arr: CollectionFieldValueCreationAttributes[] = [];
@@ -46,6 +54,7 @@ export class CollectionService {
         await this.collectionFieldValuesRepository.bulkCreate(arr);      
     }
     
+
     private async createCollectionFields(fields: CollectionFieldDto[]) {
         await this.collectionFieldRepository.bulkCreate(fields);
     }
