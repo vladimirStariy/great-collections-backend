@@ -5,6 +5,7 @@ import { CollectionFieldDto, CollectionRecordDto, CreateCollectionItemRequestDto
 import { CollectionField } from './models/collection.field';
 import { CollectionItem } from './models/collection.item';
 import { CollectionFieldValue, CollectionFieldValueCreationAttributes } from './models/collection.field.value';
+import { GoogleDriveService } from '../google-drive/google.service';
 
 @Injectable()
 export class CollectionService {
@@ -13,10 +14,22 @@ export class CollectionService {
         @InjectModel(Collection) private collectionRepository: typeof Collection,
         @InjectModel(CollectionField) private collectionFieldRepository: typeof CollectionField,
         @InjectModel(CollectionItem) private collectionItemRepository: typeof CollectionItem,
-        @InjectModel(CollectionFieldValue) private collectionFieldValuesRepository: typeof CollectionFieldValue
+        @InjectModel(CollectionFieldValue) private collectionFieldValuesRepository: typeof CollectionFieldValue,
+        private readonly googleDriveService: GoogleDriveService
     ) {}
 
-    async createCollection(collectionDto: CreateCollectionRequestDto) {
+    private async uploadImage(file: Express.Multer.File) {
+        const GOOGLE_DRIVE_FOLDER_ID = '1z-0Qp-NsDHX81lVjv47JTwqrBrO3Bil-';
+        const imageUrl = await this.googleDriveService.uploadFile(
+            file,
+            GOOGLE_DRIVE_FOLDER_ID,
+        );
+        return { imageUrl };
+    }
+
+    async createCollection(collectionDto: CreateCollectionRequestDto, file: Express.Multer.File) {
+        const response = await this.uploadImage(file);
+        collectionDto.collectionData.imagePath = response.imageUrl;
         const created = await this.collectionRepository.create(collectionDto.collectionData);
         collectionDto.fields.map((item, index) => {collectionDto.fields[index].collectionId = created.id})
         await this.createCollectionFields(collectionDto.fields);

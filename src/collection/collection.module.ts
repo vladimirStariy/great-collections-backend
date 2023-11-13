@@ -8,6 +8,7 @@ import { CollectionItem } from './models/collection.item';
 import { CollectionItemTag } from 'src/tag/model/collection.item.tag';
 import { CollectionField } from './models/collection.field';
 import { CollectionFieldValue } from './models/collection.field.value';
+import { GoogleDriveService } from 'src/google-drive';
 
 @Module({
   controllers: [CollectionController],
@@ -19,8 +20,8 @@ import { CollectionFieldValue } from './models/collection.field.value';
         CollectionItem, 
         CollectionFieldValue, 
         CollectionItemTag, 
-        Tag
-    ]),
+        Tag, 
+    ])
   ],
   exports: [
     CollectionService

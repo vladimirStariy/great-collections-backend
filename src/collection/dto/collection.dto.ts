@@ -3,6 +3,7 @@ export interface CreateCollectionRequestDto {
         name: string;
         description: string;
         theme: string;
+        imagePath?: string;
     }
     fields: CollectionFieldDto[]
 }

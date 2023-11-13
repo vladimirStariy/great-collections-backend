@@ -12,6 +12,7 @@ import { CollectionItem } from "./collection/models/collection.item";
 import { CollectionItemTag } from "./tag/model/collection.item.tag";
 import { CollectionField } from "./collection/models/collection.field";
 import { CollectionFieldValue } from "./collection/models/collection.field.value";
+import { GoogleDriveModule } from "./google-drive/google.module";
 
 @Module({
     imports: [
@@ -35,6 +36,12 @@ import { CollectionFieldValue } from "./collection/models/collection.field.value
                 Tag
             ],
             autoLoadModels: true
+        }),
+        GoogleDriveModule.register({
+            clientId: '593131673474-b5lnt6kfvhvb3758n88ncfkm1pb79gv7.apps.googleusercontent.com',
+            clientSecret: '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',
+            redirectUrl: 'https://developers.google.com/oauthplayground',
+            refreshToken: '1//04QnCTOKHCffcCgYIARAAGAQSNwF-L9IrbYjYKPTnWho11nx85TJKNi1L2CeGmCmMJIc2Xgkw-xce424Do8OYWWeockC7apCBzwE',
         }),
         UserModule,
         AuthModule,

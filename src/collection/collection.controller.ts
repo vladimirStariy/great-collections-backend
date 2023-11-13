@@ -1,6 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Req, UploadedFile, UseGuards, UseInterceptors, UsePipes, BadRequestException } from '@nestjs/common';
 import { CollectionService } from './collection.service';
 import { CreateCollectionItemRequestDto, CreateCollectionRequestDto, GetCollectionsRequestDto } from './dto/collection.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
 
 @Controller('')
 export class CollectionController {
@@ -8,8 +10,17 @@ export class CollectionController {
     constructor(private collectionService: CollectionService) {}
 
     @Post('/create-collection')
-    async createCollection(@Body() collectionDto: CreateCollectionRequestDto) {
-        await this.collectionService.createCollection(collectionDto);
+    @UseInterceptors(FileInterceptor('file', {
+        storage: memoryStorage(),
+        limits: { fileSize: 2097152 }, // 2MB --- 2*2^20
+        fileFilter: (req, file, callback) => {
+            return file.mimetype.match(/image\/(jpg|jpeg|png|gif)$/)
+            ? callback(null, true)
+            : callback(new BadRequestException('Only image files are allowed'), false);
+        }
+    })) 
+    async createCollection(@UploadedFile() file: Express.Multer.File, @Body() collectionDto: CreateCollectionRequestDto) {
+        await this.collectionService.createCollection(collectionDto, file);
     }
 
     @Post('/create-collection-item')
