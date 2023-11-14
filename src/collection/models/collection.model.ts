@@ -1,11 +1,13 @@
-import { DataType, Model, Table, Column, AllowNull, HasMany } from "sequelize-typescript";
+import { DataType, Model, Table, Column, AllowNull, HasMany, ForeignKey } from "sequelize-typescript";
 import { CollectionField } from "./collection.field";
 import { CollectionItem } from "./collection.item";
+import { User } from "src/user/models/user.model";
 
 interface ICollectionCreationModel {
     name: string;
     description: string;
     theme: string;
+    imagePath?: string;
 }
 
 @Table({tableName: 'collections'})
@@ -25,6 +27,10 @@ export class Collection extends Model<Collection, ICollectionCreationModel> {
 
     @Column({type: DataType.STRING, allowNull: true})
     imagePath: string;
+
+    @ForeignKey(() => User)
+    @Column({type: DataType.INTEGER})
+    userId: number;
 
     @HasMany(() => CollectionField)
     customFields: CollectionField[]

@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import * as fs from 'fs';
 import { google } from 'googleapis';
 import { GOOGLE_DRIVE_CONFIG } from './google.constants';
 import { GoogleDriveConfigType } from './types/types';
@@ -7,10 +6,7 @@ import { Stream } from 'stream';
 
 @Injectable()
 export class GoogleDriveService {
-  constructor(
-    @Inject(GOOGLE_DRIVE_CONFIG)
-    private readonly googleDriveConfig: GoogleDriveConfigType,
-  ) {}
+  constructor(@Inject(GOOGLE_DRIVE_CONFIG) private readonly googleDriveConfig: GoogleDriveConfigType) {}
 
   async uploadFile(file: Express.Multer.File, folderId?: string) {
     try {
@@ -53,7 +49,7 @@ export class GoogleDriveService {
     });
     const result = await drive.files.get({
       fileId,
-      fields: 'webViewLink, webContentLink'
+      fields: 'webContentLink'
     });
     const rawFileUrl = result.data.webContentLink;
     const substr = '&export=download';

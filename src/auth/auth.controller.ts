@@ -33,6 +33,6 @@ export class AuthController {
             secure: true,
             sameSite: 'strict'
         });
-        return { accessToken: pairTokens.accessToken };
+        return { access: pairTokens.accessToken };
     }
 }

@@ -1,11 +1,16 @@
 export interface CreateCollectionRequestDto {
-    collectionData: {
-        name: string;
-        description: string;
-        theme: string;
-        imagePath?: string;
-    }
+    name: string;
+    description: string;
+    theme: string;
+    imagePath?: string;
     fields: CollectionFieldDto[]
+}
+
+export interface ICollectionData {
+    name: string;
+    description: string;
+    theme: string;
+    imagePath?: string;
 }
 
 export class CollectionRecordDto {
@@ -13,6 +18,7 @@ export class CollectionRecordDto {
     name: string;
     theme: string;
     itemsQuantity: number;
+    imagePath?: string;
 }
 
 export interface CollectionFieldDto {

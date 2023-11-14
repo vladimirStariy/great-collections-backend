@@ -3,12 +3,14 @@ import { CollectionService } from './collection.service';
 import { CreateCollectionItemRequestDto, CreateCollectionRequestDto, GetCollectionsRequestDto } from './dto/collection.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
 
 @Controller('')
 export class CollectionController {
 
     constructor(private collectionService: CollectionService) {}
 
+    @UseGuards(JwtAuthGuard)
     @Post('/create-collection')
     @UseInterceptors(FileInterceptor('file', {
         storage: memoryStorage(),
@@ -20,9 +22,14 @@ export class CollectionController {
         }
     })) 
     async createCollection(@UploadedFile() file: Express.Multer.File, @Body() collectionDto: CreateCollectionRequestDto) {
-        await this.collectionService.createCollection(collectionDto, file);
+        collectionDto.fields.map((item, index) => {
+            collectionDto.fields[index] = JSON.parse(String(collectionDto.fields[index]))
+        })
+        const response = await this.collectionService.createCollection(collectionDto, file);
+        return response;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post('/create-collection-item')
     async createCollectionItem(@Body() collectionItemDto: CreateCollectionItemRequestDto) {
         await this.collectionService.createCollectionItem(collectionItemDto);

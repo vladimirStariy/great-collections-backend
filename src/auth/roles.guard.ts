@@ -6,11 +6,12 @@ import {
     Injectable,
     UnauthorizedException
 } from "@nestjs/common";
+
 import { Observable } from "rxjs";
 import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
-export class RolesGuard implements CanActivate {
+export class AdminRolesGuard implements CanActivate {
     constructor(private jwtService: JwtService) {
     }
 

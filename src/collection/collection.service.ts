@@ -29,8 +29,13 @@ export class CollectionService {
 
     async createCollection(collectionDto: CreateCollectionRequestDto, file: Express.Multer.File) {
         const response = await this.uploadImage(file);
-        collectionDto.collectionData.imagePath = response.imageUrl;
-        const created = await this.collectionRepository.create(collectionDto.collectionData);
+        collectionDto.imagePath = response.imageUrl;
+        const created = await this.collectionRepository.create({
+            name: collectionDto.name, 
+            description: collectionDto.description,
+            theme: collectionDto.theme,
+            imagePath: collectionDto.imagePath,
+        });
         collectionDto.fields.map((item, index) => {collectionDto.fields[index].collectionId = created.id})
         await this.createCollectionFields(collectionDto.fields);
     }
@@ -52,7 +57,7 @@ export class CollectionService {
         })
         const rawCollections = (await _collections).rows;
         const collectionRecordDto: CollectionRecordDto[] = []; 
-        rawCollections.forEach(item => collectionRecordDto.push({id: item.id, name: item.name, theme: item.theme, itemsQuantity: item.items.length}))
+        rawCollections.forEach(item => collectionRecordDto.push({id: item.id, name: item.name, theme: item.theme, imagePath: item.imagePath, itemsQuantity: item.items.length}))
         return collectionRecordDto;
     }
     

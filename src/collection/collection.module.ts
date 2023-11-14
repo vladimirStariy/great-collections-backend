@@ -8,13 +8,16 @@ import { CollectionItem } from './models/collection.item';
 import { CollectionItemTag } from 'src/tag/model/collection.item.tag';
 import { CollectionField } from './models/collection.field';
 import { CollectionFieldValue } from './models/collection.field.value';
-import { GoogleDriveService } from 'src/google-drive';
+import { User } from 'src/user/models/user.model';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   controllers: [CollectionController],
   providers: [CollectionService],
   imports: [
+    forwardRef(() => AuthModule),
     SequelizeModule.forFeature([
+        User,
         Collection, 
         CollectionField, 
         CollectionItem, 

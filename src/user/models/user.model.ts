@@ -1,4 +1,5 @@
-import { DataType, Model, Table, Column } from "sequelize-typescript";
+import { DataType, Model, Table, Column, HasMany } from "sequelize-typescript";
+import { Collection } from "src/collection/models/collection.model";
 
 interface IUserCreationModel {
     email: string;
@@ -22,4 +23,7 @@ export class User extends Model<User, IUserCreationModel> {
 
     @Column({type: DataType.BOOLEAN, defaultValue: false})
     isAdmin: boolean;
+
+    @HasMany(() => Collection)
+    collections: Collection[]
 }
