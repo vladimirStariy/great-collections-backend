@@ -42,9 +42,10 @@ export class AuthService {
         }
     }
 
-    private async validateUser(userDto: UserDto) {
+    async validateUser(userDto: UserDto) {
         const user = await this.userService.getByEmail(userDto.email);
         if(!user) throw new UnauthorizedException({message: 'Invalid email'});
+        if(user.isBanned) new UnauthorizedException({message: 'User is banned.'});
         const passwordEquals = await bcrypt.compare(userDto.password, user.password);
         if (passwordEquals) { return user } else throw new UnauthorizedException({message: 'Invalid password'});
     }

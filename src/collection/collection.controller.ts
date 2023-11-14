@@ -3,7 +3,8 @@ import { CollectionService } from './collection.service';
 import { CreateCollectionItemRequestDto, CreateCollectionRequestDto, GetCollectionsRequestDto } from './dto/collection.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from 'src/auth/strategies/jwt.auth.guard';
 
 @Controller('')
 export class CollectionController {

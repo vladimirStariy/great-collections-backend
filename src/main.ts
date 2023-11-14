@@ -1,5 +1,6 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
+import { useContainer } from 'class-validator';
 import * as cookieParser from 'cookie-parser';
 
 async function start() {
@@ -17,6 +18,8 @@ async function start() {
         origin: process.env.FRONT_ORIGIN,
         credentials: true,
     });
+
+    useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
     await app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
 }
