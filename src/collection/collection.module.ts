@@ -10,12 +10,14 @@ import { CollectionField } from './models/collection.field';
 import { CollectionFieldValue } from './models/collection.field.value';
 import { User } from 'src/user/models/user.model';
 import { AuthModule } from 'src/auth/auth.module';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   controllers: [CollectionController],
   providers: [CollectionService],
   imports: [
     forwardRef(() => AuthModule),
+    forwardRef(() => UserModule),
     SequelizeModule.forFeature([
         User,
         Collection, 

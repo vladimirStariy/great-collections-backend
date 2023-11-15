@@ -38,3 +38,9 @@ export interface GetCollectionsRequestDto {
     page: number;
     recordsCount: number;
 }
+
+export interface GetUserCollectionsRequestDto {
+    page: number;
+    recordsCount: number;
+    userId: number;
+}
