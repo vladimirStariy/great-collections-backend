@@ -3,8 +3,9 @@ import { CollectionService } from './collection.service';
 import { CreateCollectionItemRequestDto, CreateCollectionRequestDto, GetCollectionsRequestDto } from './dto/collection.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
-import { AuthGuard } from '@nestjs/passport';
-import { JwtAuthGuard } from 'src/auth/strategies/jwt.auth.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { JwtUserGuard } from 'src/auth/guards/jwt.user';
+
 
 @Controller('')
 export class CollectionController {
@@ -21,16 +22,18 @@ export class CollectionController {
             ? callback(null, true)
             : callback(new BadRequestException('Only image files are allowed'), false);
         }
-    })) 
-    async createCollection(@UploadedFile() file: Express.Multer.File, @Body() collectionDto: CreateCollectionRequestDto) {
+    }))
+    async createCollection(@Req() req: any,
+                           @UploadedFile() file: Express.Multer.File, 
+                           @Body() collectionDto: CreateCollectionRequestDto) {
         collectionDto.fields.map((item, index) => {
             collectionDto.fields[index] = JSON.parse(String(collectionDto.fields[index]))
         })
-        const response = await this.collectionService.createCollection(collectionDto, file);
+        const response = await this.collectionService.createCollection(collectionDto, req.user.userId, file);
         return response;
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtUserGuard)
     @Post('/create-collection-item')
     async createCollectionItem(@Body() collectionItemDto: CreateCollectionItemRequestDto) {
         await this.collectionService.createCollectionItem(collectionItemDto);
@@ -39,6 +42,13 @@ export class CollectionController {
     @Post('/collections')
     async getCollections(@Body() dto: GetCollectionsRequestDto) {
         const response = await this.collectionService.getCollectionsWithPagination(dto);
+        return response;
+    }
+
+    @UseGuards(JwtUserGuard)
+    @Post('/my-collections')
+    async getUserCollections(@Req() req: any, @Body() dto: GetCollectionsRequestDto) {
+        const response = await this.collectionService.getUserCollections(dto, req.user.userId);
         return response;
     }
 }

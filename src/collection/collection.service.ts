@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Collection } from './models/collection.model';
-import { CollectionFieldDto, CollectionRecordDto, CreateCollectionItemRequestDto, CreateCollectionRequestDto, GetCollectionsRequestDto } from './dto/collection.dto';
+import { CollectionFieldDto, CollectionRecordDto, CreateCollectionItemRequestDto, CreateCollectionRequestDto, GetCollectionsRequestDto, GetUserCollectionsRequestDto } from './dto/collection.dto';
 import { CollectionField } from './models/collection.field';
 import { CollectionItem } from './models/collection.item';
 import { CollectionFieldValue, CollectionFieldValueCreationAttributes } from './models/collection.field.value';
@@ -27,14 +27,17 @@ export class CollectionService {
         return { imageUrl };
     }
 
-    async createCollection(collectionDto: CreateCollectionRequestDto, file: Express.Multer.File) {
-        const response = await this.uploadImage(file);
-        collectionDto.imagePath = response.imageUrl;
+    async createCollection(collectionDto: CreateCollectionRequestDto, userId: number, file: Express.Multer.File) {
+        if(file) {
+            const response = await this.uploadImage(file);
+            collectionDto.imagePath = response.imageUrl;
+        } 
         const created = await this.collectionRepository.create({
             name: collectionDto.name, 
             description: collectionDto.description,
             theme: collectionDto.theme,
             imagePath: collectionDto.imagePath,
+            userId: userId
         });
         collectionDto.fields.map((item, index) => {collectionDto.fields[index].collectionId = created.id})
         await this.createCollectionFields(collectionDto.fields);
@@ -61,6 +64,20 @@ export class CollectionService {
         return collectionRecordDto;
     }
     
+    async getUserCollections(dto: GetCollectionsRequestDto, userId: number) {
+        const _offset = (dto.page - 1) * dto.recordsCount;
+        const _collections = this.collectionRepository.findAndCountAll({
+            where: {userId: userId},
+            offset: _offset,
+            limit: dto.recordsCount,
+            include: [{ model: CollectionItem }]
+        })
+        const rawCollections = (await _collections).rows;
+        const collectionRecordDto: CollectionRecordDto[] = []; 
+        rawCollections.forEach(item => collectionRecordDto.push({id: item.id, name: item.name, theme: item.theme, imagePath: item.imagePath, itemsQuantity: item.items.length}))
+        return collectionRecordDto;
+    }
+
     private async createCollectionItemFieldsValues(collectionId: number, collectionItemId: number, data: any[]) {
         const fields = await this.getCollectionFields(collectionId);
         let arr: CollectionFieldValueCreationAttributes[] = [];

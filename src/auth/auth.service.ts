@@ -36,10 +36,10 @@ export class AuthService {
 
     private async generatePairToken(user: User) {
         const payload = { email: user.email, isAdmin: user.isAdmin }
-        return { 
-            accessToken: this.jwtService.sign(payload, {expiresIn: 60}),
-            refreshToken: this.jwtService.sign(payload, {expiresIn: '7d'})
-        }
+        const accessToken = await this.jwtService.signAsync(payload, {algorithm: 'HS256'})
+        const refreshToken = await this.jwtService.signAsync(payload, {algorithm: 'HS256', expiresIn: '7d'})
+        
+        return { accessToken, refreshToken }
     }
 
     async validateUser(userDto: UserDto) {

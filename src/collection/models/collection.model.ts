@@ -8,6 +8,7 @@ interface ICollectionCreationModel {
     description: string;
     theme: string;
     imagePath?: string;
+    userId: number;
 }
 
 @Table({tableName: 'collections'})
