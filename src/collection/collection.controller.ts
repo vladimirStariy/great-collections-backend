@@ -51,4 +51,9 @@ export class CollectionController {
         const response = await this.collectionService.getUserCollections(dto, req.user.userId);
         return response;
     }
+
+    @Delete('/delete-collection')
+    async deleteCollection() {
+        
+    }
 }
