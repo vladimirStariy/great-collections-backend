@@ -8,12 +8,11 @@ export class UserService {
 
     constructor(@InjectModel(User) private userRepository: typeof User) {}
 
-    async createUser(email: string, password: string) {
+    async createUser(email: string, password: string, name: string) {
         try {
-            const userDto: UserDto = {email: email, password: password};
             const user = await this.getByEmail(email);
             if(user) { throw new UnauthorizedException({message: 'User with the same email exists'}); }
-            const newUser = await this.userRepository.create(userDto);
+            const newUser = await this.userRepository.create({ email: email, password: password, name: name });
             return newUser;
         } catch (e) {
             return { message: e.message }
