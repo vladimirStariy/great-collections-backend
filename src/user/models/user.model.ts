@@ -4,6 +4,7 @@ import { Collection } from "src/collection/models/collection.model";
 interface IUserCreationModel {
     email: string;
     password: string;
+    name: string;
 }
 
 @Table({tableName: 'users'})

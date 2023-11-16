@@ -1,7 +1,7 @@
 import { Res, Req, Body, Controller, Delete, Get, Param, Post, UseGuards, UsePipes } from '@nestjs/common';
 import { Request, Response } from 'express'
 import { AuthService } from './auth.service';
-import { AuthDto } from './dto/auth.dto';
+import { AuthDto, RegisterDto } from './dto/auth.dto';
 import { UserDto } from 'src/user/dto/user.dto';
 
 @Controller('')
@@ -21,8 +21,8 @@ export class AuthController {
     }
 
     @Post('register')
-    async register(@Body() userDto: UserDto) {
-        return await this.authService.register(userDto);
+    async register(@Body() registerDto: RegisterDto) {
+        return await this.authService.register(registerDto);
     }
 
     @Get('refresh')
