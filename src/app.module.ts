@@ -13,6 +13,8 @@ import { CollectionItemTag } from "./tag/model/collection.item.tag";
 import { CollectionField } from "./collection/models/collection.field";
 import { CollectionFieldValue } from "./collection/models/collection.field.value";
 import { GoogleDriveModule } from "./google-drive/google.module";
+import { ThemeModule } from "./theme/theme.module";
+import { Theme } from "./theme/model/theme.model";
 
 @Module({
     imports: [
@@ -33,7 +35,8 @@ import { GoogleDriveModule } from "./google-drive/google.module";
                 CollectionItem,
                 CollectionFieldValue,
                 CollectionItemTag, 
-                Tag
+                Tag,
+                Theme
             ],
             autoLoadModels: true
         }),
@@ -46,7 +49,8 @@ import { GoogleDriveModule } from "./google-drive/google.module";
         UserModule,
         AuthModule,
         CollectionModule,
-        TagModule
+        TagModule,
+        ThemeModule
     ],
     controllers: [],
     providers: []

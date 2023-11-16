@@ -6,6 +6,7 @@ import { CollectionField } from './models/collection.field';
 import { CollectionItem } from './models/collection.item';
 import { CollectionFieldValue, CollectionFieldValueCreationAttributes } from './models/collection.field.value';
 import { GoogleDriveService } from '../google-drive/google.service';
+import { Theme } from 'src/theme/model/theme.model';
 
 @Injectable()
 export class CollectionService {
@@ -15,6 +16,7 @@ export class CollectionService {
         @InjectModel(CollectionField) private collectionFieldRepository: typeof CollectionField,
         @InjectModel(CollectionItem) private collectionItemRepository: typeof CollectionItem,
         @InjectModel(CollectionFieldValue) private collectionFieldValuesRepository: typeof CollectionFieldValue,
+        @InjectModel(Theme) private themeRepository: typeof Theme,
         private readonly googleDriveService: GoogleDriveService
     ) {}
 
@@ -35,7 +37,7 @@ export class CollectionService {
         const created = await this.collectionRepository.create({
             name: collectionDto.name, 
             description: collectionDto.description,
-            theme: collectionDto.theme,
+            themeId: collectionDto.themeId,
             imagePath: collectionDto.imagePath,
             userId: userId
         });
@@ -60,7 +62,17 @@ export class CollectionService {
         })
         const rawCollections = (await _collections).rows;
         const collectionRecordDto: CollectionRecordDto[] = []; 
-        rawCollections.forEach(item => collectionRecordDto.push({id: item.id, name: item.name, theme: item.theme, imagePath: item.imagePath, itemsQuantity: item.items.length}))
+        let _themes = await this.themeRepository.findAll();
+        rawCollections.forEach(item => {
+            collectionRecordDto.push({
+                id: item.id, 
+                name: item.name, 
+                themeId: item.themeId, 
+                theme: _themes.find(elem => elem.id === item.themeId).name, 
+                imagePath: item.imagePath, 
+                itemsQuantity: item.items.length
+            })
+        })
         return collectionRecordDto;
     }
     
@@ -74,7 +86,17 @@ export class CollectionService {
         })
         const rawCollections = (await _collections).rows;
         const collectionRecordDto: CollectionRecordDto[] = []; 
-        rawCollections.forEach(item => collectionRecordDto.push({id: item.id, name: item.name, theme: item.theme, imagePath: item.imagePath, itemsQuantity: item.items.length}))
+        let _themes = await this.themeRepository.findAll();
+        rawCollections.forEach(item => {
+            collectionRecordDto.push({
+                id: item.id, 
+                name: item.name, 
+                themeId: item.themeId, 
+                theme: _themes.find(elem => elem.id === item.themeId).name, 
+                imagePath: item.imagePath, 
+                itemsQuantity: item.items.length
+            })
+        })
         return collectionRecordDto;
     }
 
@@ -103,4 +125,3 @@ export class CollectionService {
         return collectionFields;
     } 
 }
-

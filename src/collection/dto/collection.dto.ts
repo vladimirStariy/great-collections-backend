@@ -1,7 +1,7 @@
 export interface CreateCollectionRequestDto {
     name: string;
     description: string;
-    theme: string;
+    themeId: number;
     imagePath?: string;
     fields: CollectionFieldDto[]
 }
@@ -9,13 +9,14 @@ export interface CreateCollectionRequestDto {
 export interface ICollectionData {
     name: string;
     description: string;
-    theme: string;
+    themeId: number;
     imagePath?: string;
 }
 
 export class CollectionRecordDto {
     id: number;
     name: string;
+    themeId: number;
     theme: string;
     itemsQuantity: number;
     imagePath?: string;

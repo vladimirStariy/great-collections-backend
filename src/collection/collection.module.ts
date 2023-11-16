@@ -11,6 +11,8 @@ import { CollectionFieldValue } from './models/collection.field.value';
 import { User } from 'src/user/models/user.model';
 import { AuthModule } from 'src/auth/auth.module';
 import { UserModule } from 'src/user/user.module';
+import { Theme } from 'src/theme/model/theme.model';
+import { ThemeModule } from 'src/theme/theme.module';
 
 @Module({
   controllers: [CollectionController],
@@ -18,6 +20,7 @@ import { UserModule } from 'src/user/user.module';
   imports: [
     forwardRef(() => AuthModule),
     forwardRef(() => UserModule),
+    forwardRef(() => ThemeModule),
     SequelizeModule.forFeature([
         User,
         Collection, 
@@ -25,7 +28,8 @@ import { UserModule } from 'src/user/user.module';
         CollectionItem, 
         CollectionFieldValue, 
         CollectionItemTag, 
-        Tag, 
+        Tag,
+        Theme 
     ])
   ],
   exports: [
