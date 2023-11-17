@@ -1,14 +1,15 @@
 export interface CreateCollectionRequestDto {
     name: string;
-    description: string;
-    themeId: number;
+    description?: string;
+    theme: number;
+    file: Express.Multer.File;
     imagePath?: string;
     fields: CollectionFieldDto[]
 }
 
 export interface ICollectionData {
     name: string;
-    description: string;
+    description?: string;
     themeId: number;
     imagePath?: string;
 }

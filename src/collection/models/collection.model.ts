@@ -6,7 +6,7 @@ import { Theme } from "src/theme/model/theme.model";
 
 interface ICollectionCreationModel {
     name: string;
-    description: string;
+    description?: string;
     themeId: number;
     imagePath?: string;
     userId: number;

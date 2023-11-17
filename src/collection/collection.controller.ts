@@ -24,11 +24,12 @@ export class CollectionController {
         }
     }))
     async createCollection(@Req() req: any,
-                           @UploadedFile() file: Express.Multer.File, 
+                           @UploadedFile('file') file: Express.Multer.File, 
                            @Body() collectionDto: CreateCollectionRequestDto) {
         collectionDto.fields.map((item, index) => {
             collectionDto.fields[index] = JSON.parse(String(collectionDto.fields[index]))
         })
+        collectionDto.description = 'test';
         const response = await this.collectionService.createCollection(collectionDto, req.user.userId, file);
         return response;
     }
@@ -49,6 +50,12 @@ export class CollectionController {
     @Post('/my-collections')
     async getUserCollections(@Req() req: any, @Body() dto: GetCollectionsRequestDto) {
         const response = await this.collectionService.getUserCollections(dto, req.user.userId);
+        return response;
+    }
+
+    @Get('/collection-directories')
+    async getCollectionDirectories() {
+        const response = await this.collectionService.getCollectionDirectories();
         return response;
     }
 

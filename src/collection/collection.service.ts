@@ -37,7 +37,7 @@ export class CollectionService {
         const created = await this.collectionRepository.create({
             name: collectionDto.name, 
             description: collectionDto.description,
-            themeId: collectionDto.themeId,
+            themeId: collectionDto.theme,
             imagePath: collectionDto.imagePath,
             userId: userId
         });
@@ -63,6 +63,7 @@ export class CollectionService {
         const rawCollections = (await _collections).rows;
         const collectionRecordDto: CollectionRecordDto[] = []; 
         let _themes = await this.themeRepository.findAll();
+        console.log(rawCollections)
         rawCollections.forEach(item => {
             collectionRecordDto.push({
                 id: item.id, 
@@ -100,6 +101,17 @@ export class CollectionService {
         return collectionRecordDto;
     }
 
+    async getCollectionDirectories() {
+        const themes = await this.themeRepository.findAll();
+        const types = [
+            {value: 'INTEGER', label: 'Number'},
+            {value: 'VARCHAR', label: 'String'},
+            {value: 'BOOLEAN', label: 'Logical'},
+            {value: 'DECIMAL', label: 'Money'},
+        ];
+        return { themes, types}
+    }
+
     private async createCollectionItemFieldsValues(collectionId: number, collectionItemId: number, data: any[]) {
         const fields = await this.getCollectionFields(collectionId);
         let arr: CollectionFieldValueCreationAttributes[] = [];
@@ -111,7 +123,6 @@ export class CollectionService {
         await this.collectionFieldValuesRepository.bulkCreate(arr);      
     }
     
-
     private async createCollectionFields(fields: CollectionFieldDto[]) {
         await this.collectionFieldRepository.bulkCreate(fields);
     }
