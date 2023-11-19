@@ -7,6 +7,18 @@ export interface CreateCollectionRequestDto {
     fields: CollectionFieldDto[]
 }
 
+export interface GetCollectionRequest {
+    id: number;
+}
+
+export interface GetCollectionResponseDto {
+    name: string;
+    description?: string;
+    themeId: number;
+    imagePath?: string;
+    
+}
+
 export interface ICollectionData {
     name: string;
     description?: string;

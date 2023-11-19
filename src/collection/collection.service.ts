@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Collection } from './models/collection.model';
-import { CollectionFieldDto, CollectionRecordDto, CreateCollectionItemRequestDto, CreateCollectionRequestDto, GetCollectionsRequestDto, GetUserCollectionsRequestDto } from './dto/collection.dto';
+import { CollectionFieldDto, CollectionRecordDto, CreateCollectionItemRequestDto, CreateCollectionRequestDto, GetCollectionRequest, GetCollectionsRequestDto, GetUserCollectionsRequestDto } from './dto/collection.dto';
 import { CollectionField } from './models/collection.field';
 import { CollectionItem } from './models/collection.item';
 import { CollectionFieldValue, CollectionFieldValueCreationAttributes } from './models/collection.field.value';
@@ -77,6 +77,13 @@ export class CollectionService {
         return collectionRecordDto;
     }
     
+    async getCollectionById(dto: GetCollectionRequest) {
+        const collection = await this.collectionRepository.findByPk(dto.id);
+        const collectionItems = await this.getCollectionItems(dto.id)
+        const collectionFields = await this.getCollectionFields(dto.id)
+        return {collection, collectionItems, collectionFields};
+    }
+
     async getUserCollections(dto: GetCollectionsRequestDto, userId: number) {
         const _offset = (dto.page - 1) * dto.recordsCount;
         const _collections = this.collectionRepository.findAndCountAll({
@@ -118,7 +125,7 @@ export class CollectionService {
         fields.map((item, index) => arr.push({
             collectionFieldId: item.id, 
             collectionItemId: collectionItemId, 
-            value: data[index]
+            value: data[index].value
         }))
         await this.collectionFieldValuesRepository.bulkCreate(arr);      
     }
@@ -131,8 +138,19 @@ export class CollectionService {
         const collectionFields = await this.collectionFieldRepository.findAll({
             where: {
                 collectionId: collectionId
-            }
+            },
+            
         })
         return collectionFields;
     } 
+
+    private async getCollectionItems(collectionId: number) {
+        const collectionItems = await this.collectionItemRepository.findAll({
+            where: {
+                collection_id: collectionId
+            },
+            include: {model: CollectionFieldValue}
+        })
+        return collectionItems;
+    }
 }

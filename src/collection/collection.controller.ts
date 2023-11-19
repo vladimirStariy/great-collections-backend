@@ -7,7 +7,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { JwtUserGuard } from 'src/auth/guards/jwt.user';
 
 
-@Controller('')
+@Controller('collection')
 export class CollectionController {
 
     constructor(private collectionService: CollectionService) {}
@@ -34,10 +34,16 @@ export class CollectionController {
         return response;
     }
 
-    @UseGuards(JwtUserGuard)
     @Post('/create-collection-item')
     async createCollectionItem(@Body() collectionItemDto: CreateCollectionItemRequestDto) {
+        console.log(collectionItemDto)
         await this.collectionService.createCollectionItem(collectionItemDto);
+    }
+
+    @Get('/:collectionId')
+    async getCollection(@Param('collectionId') collectionId: number) {
+        const response = await this.collectionService.getCollectionById({ id: collectionId });
+        return response;
     }
 
     @Post('/collections')
