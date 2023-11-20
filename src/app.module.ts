@@ -15,6 +15,7 @@ import { CollectionFieldValue } from "./collection/models/collection.field.value
 import { GoogleDriveModule } from "./google-drive/google.module";
 import { ThemeModule } from "./theme/theme.module";
 import { Theme } from "./theme/model/theme.model";
+import { Favorites } from "./collection/models/favorite.model";
 
 @Module({
     imports: [
@@ -36,7 +37,8 @@ import { Theme } from "./theme/model/theme.model";
                 CollectionFieldValue,
                 CollectionItemTag, 
                 Tag,
-                Theme
+                Theme,
+                Favorites
             ],
             autoLoadModels: true
         }),
@@ -44,7 +46,7 @@ import { Theme } from "./theme/model/theme.model";
             clientId: '593131673474-b5lnt6kfvhvb3758n88ncfkm1pb79gv7.apps.googleusercontent.com',
             clientSecret: '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',
             redirectUrl: 'https://developers.google.com/oauthplayground',
-            refreshToken: '1//04QnCTOKHCffcCgYIARAAGAQSNwF-L9IrbYjYKPTnWho11nx85TJKNi1L2CeGmCmMJIc2Xgkw-xce424Do8OYWWeockC7apCBzwE',
+            refreshToken: '1//0408XWH79EkOcCgYIARAAGAQSNwF-L9IrjrrWQj8yCM1bkCBAkG6bgUZ_ttP7QYgpiwevRWim1alRGjfFkP7odO13T0XYznPf84Q',
         }),
         UserModule,
         AuthModule,

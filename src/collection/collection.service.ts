@@ -62,19 +62,7 @@ export class CollectionService {
             include: { model: CollectionItem, as: 'items' }
         })
         const rawCollections = (await _collections).rows;
-        const collectionRecordDto: CollectionRecordDto[] = []; 
-        let _themes = await this.themeRepository.findAll();
-        console.log(JSON.stringify(rawCollections, null))
-        rawCollections.forEach(item => {
-            collectionRecordDto.push({
-                id: item.id, 
-                name: item.name, 
-                themeId: item.themeId, 
-                theme: _themes.find(elem => elem.id === item.themeId).name, 
-                imagePath: item.imagePath, 
-                itemsQuantity: item.items.length
-            })
-        })
+        const collectionRecordDto = await this.mapCollectionToCollectionDto(rawCollections);
         return collectionRecordDto;
     }
     
@@ -85,18 +73,40 @@ export class CollectionService {
         return {collection, collectionItems, collectionFields};
     }
 
-    async getUserCollections(dto: GetCollectionsRequestDto, userId: number) {
-        const _offset = (dto.page - 1) * dto.recordsCount;
-        const _collections = this.collectionRepository.findAndCountAll({
+    async getCollectionsByUserId(userId: number) {
+        const rawCollections = await this.collectionRepository.findAll({
             where: {userId: userId},
-            offset: _offset,
-            limit: dto.recordsCount,
             include: [{ model: CollectionItem }]
         })
-        const rawCollections = (await _collections).rows;
+        const collections = await this.mapCollectionToCollectionDto(rawCollections);
+        return collections;
+    }
+
+    async getCollectionDirectories() {
+        const themes = await this.themeRepository.findAll();
+        const types = [
+            {value: 'INTEGER', label: 'Number'},
+            {value: 'VARCHAR', label: 'String'},
+            {value: 'BOOLEAN', label: 'Logical'},
+            {value: 'BIGTEXT', label: 'Big text'},
+        ];
+        return { themes, types}
+    }
+
+    async getCollectionItemById(ids: number[]) {
+        const collectionItems = await this.collectionItemRepository.findAll({
+            where: {
+                id: ids
+            },
+            include: { model: CollectionFieldValue }
+        })
+        return collectionItems;
+    }
+
+    private async mapCollectionToCollectionDto (collections: Collection[]) {
         const collectionRecordDto: CollectionRecordDto[] = []; 
         let _themes = await this.themeRepository.findAll();
-        rawCollections.forEach(item => {
+        collections.forEach(item => {
             collectionRecordDto.push({
                 id: item.id, 
                 name: item.name, 
@@ -107,17 +117,6 @@ export class CollectionService {
             })
         })
         return collectionRecordDto;
-    }
-
-    async getCollectionDirectories() {
-        const themes = await this.themeRepository.findAll();
-        const types = [
-            {value: 'INTEGER', label: 'Number'},
-            {value: 'VARCHAR', label: 'String'},
-            {value: 'BOOLEAN', label: 'Logical'},
-            {value: 'DECIMAL', label: 'Money'},
-        ];
-        return { themes, types}
     }
 
     private async createCollectionItemFieldsValues(collectionId: number, collectionItemId: number, data: any[]) {

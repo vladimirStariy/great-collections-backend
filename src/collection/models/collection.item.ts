@@ -3,7 +3,7 @@ import { CollectionItemTag } from "src/tag/model/collection.item.tag";
 import { Tag } from "src/tag/model/tag.model";
 import { Collection } from "./collection.model";
 import { CollectionFieldValue } from "./collection.field.value";
-import { Favorite } from "./favorite.model";
+import { Favorites } from "./favorite.model";
 
 @Table({tableName: 'collection-items'})
 export class CollectionItem extends Model<CollectionItem> {
@@ -20,6 +20,9 @@ export class CollectionItem extends Model<CollectionItem> {
 
     @HasMany(() => CollectionFieldValue)
     values: CollectionFieldValue[] 
+
+    @HasMany(() => Favorites)
+    likes: Favorites[]
 
     @BelongsToMany(() => Tag, () => CollectionItemTag)
     tags: Tag[]

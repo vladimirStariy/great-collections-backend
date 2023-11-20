@@ -51,13 +51,6 @@ export class CollectionController {
         return response;
     }
 
-    @UseGuards(JwtUserGuard)
-    @Post('/my-collections')
-    async getUserCollections(@Req() req: any, @Body() dto: GetCollectionsRequestDto) {
-        const response = await this.collectionService.getUserCollections(dto, req.user.userId);
-        return response;
-    }
-
     @Get('/collection-directories')
     async getCollectionDirectories() {
         console.log('THATS RIGHT')

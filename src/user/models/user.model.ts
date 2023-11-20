@@ -1,6 +1,6 @@
 import { DataType, Model, Table, Column, HasMany } from "sequelize-typescript";
 import { Collection } from "src/collection/models/collection.model";
-import { Favorite } from "src/collection/models/favorite.model";
+import { Favorites } from "src/collection/models/favorite.model";
 
 interface IUserCreationModel {
     email: string;
@@ -25,6 +25,9 @@ export class User extends Model<User, IUserCreationModel> {
 
     @Column({type: DataType.BOOLEAN, defaultValue: false})
     isAdmin: boolean;
+
+    @HasMany(() => Favorites)
+    likes: Favorites[]
 
     @HasMany(() => Collection)
     collections: Collection[]

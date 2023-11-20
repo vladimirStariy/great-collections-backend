@@ -13,7 +13,8 @@ import { AuthModule } from 'src/auth/auth.module';
 import { UserModule } from 'src/user/user.module';
 import { Theme } from 'src/theme/model/theme.model';
 import { ThemeModule } from 'src/theme/theme.module';
-import { Favorite } from './models/favorite.model';
+import { Favorites } from './models/favorite.model';
+import { ProfileModule } from 'src/profile/profile.module';
 
 @Module({
   controllers: [CollectionController],
@@ -25,13 +26,13 @@ import { Favorite } from './models/favorite.model';
     SequelizeModule.forFeature([
         User,
         Collection, 
-        CollectionField, 
+        CollectionField,
+        Favorites, 
         CollectionItem, 
         CollectionFieldValue, 
         CollectionItemTag, 
         Tag,
         Theme,
-        Favorite
     ])
   ],
   exports: [
