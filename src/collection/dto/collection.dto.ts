@@ -45,7 +45,7 @@ export interface CreateCollectionItemRequestDto {
     name: string;
     tags: number[];
     collectionId: number;
-    data: any[];
+    values: any[];
 }
 
 export interface GetCollectionsRequestDto {

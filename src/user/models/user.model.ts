@@ -1,5 +1,6 @@
 import { DataType, Model, Table, Column, HasMany } from "sequelize-typescript";
 import { Collection } from "src/collection/models/collection.model";
+import { Favorite } from "src/collection/models/favorite.model";
 
 interface IUserCreationModel {
     email: string;

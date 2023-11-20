@@ -13,6 +13,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { UserModule } from 'src/user/user.module';
 import { Theme } from 'src/theme/model/theme.model';
 import { ThemeModule } from 'src/theme/theme.module';
+import { Favorite } from './models/favorite.model';
 
 @Module({
   controllers: [CollectionController],
@@ -29,7 +30,8 @@ import { ThemeModule } from 'src/theme/theme.module';
         CollectionFieldValue, 
         CollectionItemTag, 
         Tag,
-        Theme 
+        Theme,
+        Favorite
     ])
   ],
   exports: [

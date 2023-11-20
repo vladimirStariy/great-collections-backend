@@ -5,12 +5,13 @@ import { SequelizeModule } from "@nestjs/sequelize";
 import { User } from './models/user.model';
 import { AuthModule } from 'src/auth/auth.module';
 import { Collection } from 'src/collection/models/collection.model';
+import { Favorite } from 'src/collection/models/favorite.model';
 
 @Module({
   controllers: [UserController],
   providers: [UserService],
   imports: [
-    SequelizeModule.forFeature([User, Collection]),
+    SequelizeModule.forFeature([User, Collection, Favorite]),
     forwardRef(() => AuthModule)
   ],
   exports: [

@@ -43,6 +43,7 @@ export class CollectionService {
         });
         collectionDto.fields.map((item, index) => {collectionDto.fields[index].collectionId = created.id})
         await this.createCollectionFields(collectionDto.fields);
+        return created.id;
     }
 
     async createCollectionItem(collectionItemDto: CreateCollectionItemRequestDto) {
@@ -50,7 +51,7 @@ export class CollectionService {
             name: collectionItemDto.name, 
             collection_id: collectionItemDto.collectionId
         });
-        await this.createCollectionItemFieldsValues(collectionItemDto.collectionId, created.id, collectionItemDto.data);
+        await this.createCollectionItemFieldsValues(collectionItemDto.collectionId, created.id, collectionItemDto.values);
     }
     
     async getCollectionsWithPagination(dto: GetCollectionsRequestDto) {
@@ -58,12 +59,12 @@ export class CollectionService {
         const _collections = this.collectionRepository.findAndCountAll({
             offset: _offset,
             limit: dto.recordsCount,
-            include: [{ model: CollectionItem }]
+            include: { model: CollectionItem, as: 'items' }
         })
         const rawCollections = (await _collections).rows;
         const collectionRecordDto: CollectionRecordDto[] = []; 
         let _themes = await this.themeRepository.findAll();
-        console.log(rawCollections)
+        console.log(JSON.stringify(rawCollections, null))
         rawCollections.forEach(item => {
             collectionRecordDto.push({
                 id: item.id, 
@@ -139,7 +140,6 @@ export class CollectionService {
             where: {
                 collectionId: collectionId
             },
-            
         })
         return collectionFields;
     } 
