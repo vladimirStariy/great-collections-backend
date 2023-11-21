@@ -1,4 +1,4 @@
-import { DataType, Model, Table, Column, AllowNull, BelongsToMany, HasMany, ForeignKey } from "sequelize-typescript";
+import { DataType, Model, Table, Column, AllowNull, BelongsToMany, HasMany, ForeignKey, BelongsTo } from "sequelize-typescript";
 import { CollectionItemTag } from "src/tag/model/collection.item.tag";
 import { Tag } from "src/tag/model/tag.model";
 import { Collection } from "./collection.model";
@@ -17,6 +17,9 @@ export class CollectionItem extends Model<CollectionItem> {
     @ForeignKey(() => Collection)
     @Column({type: DataType.INTEGER, allowNull: false})
     collection_id: number;
+
+    @BelongsTo(() => Collection)
+    collection: Collection
 
     @HasMany(() => CollectionFieldValue)
     values: CollectionFieldValue[] 

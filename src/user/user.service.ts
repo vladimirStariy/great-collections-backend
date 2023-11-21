@@ -40,6 +40,11 @@ export class UserService {
         return userRecordsDto;
     }
 
+    async getById(id: number) {
+        const user = await this.userRepository.findOne({where: {id: id}});
+        return user;
+    }
+
     async getByEmail(email: string) {
         const user = await this.userRepository.findOne({where: {email}, include: {all: true}})
         return user;

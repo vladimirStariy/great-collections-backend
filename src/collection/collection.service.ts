@@ -7,6 +7,7 @@ import { CollectionItem } from './models/collection.item';
 import { CollectionFieldValue, CollectionFieldValueCreationAttributes } from './models/collection.field.value';
 import { GoogleDriveService } from '../google-drive/google.service';
 import { Theme } from 'src/theme/model/theme.model';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class CollectionService {
@@ -17,6 +18,7 @@ export class CollectionService {
         @InjectModel(CollectionItem) private collectionItemRepository: typeof CollectionItem,
         @InjectModel(CollectionFieldValue) private collectionFieldValuesRepository: typeof CollectionFieldValue,
         @InjectModel(Theme) private themeRepository: typeof Theme,
+        private userService: UserService,
         private readonly googleDriveService: GoogleDriveService
     ) {}
 
@@ -66,11 +68,21 @@ export class CollectionService {
         return collectionRecordDto;
     }
     
-    async getCollectionById(dto: GetCollectionRequest) {
+    async getCollectionById(dto: GetCollectionRequest, user: {email: string, userId: number} | false) {
         const collection = await this.collectionRepository.findByPk(dto.id);
         const collectionItems = await this.getCollectionItems(dto.id)
         const collectionFields = await this.getCollectionFields(dto.id)
-        return {collection, collectionItems, collectionFields};
+        if(!user) {
+            return {collection, collectionItems, collectionFields, mode: 'watch'};
+        } else {
+            const isAdmin = (await this.userService.getById(user.userId)).isAdmin;
+            if(user.userId !== collection.userId && !isAdmin) {
+                return {collection, collectionItems, collectionFields, mode: 'watch'};
+            } 
+            if(user.userId === collection.userId || isAdmin) {
+                return {collection, collectionItems, collectionFields, mode: 'edit'};
+            }
+        }
     }
 
     async getCollectionsByUserId(userId: number) {
@@ -80,6 +92,15 @@ export class CollectionService {
         })
         const collections = await this.mapCollectionToCollectionDto(rawCollections);
         return collections;
+    }
+
+    async getAllCollections() {
+        const collections = await this.collectionRepository.findAndCountAll({
+            include: { model: CollectionItem }
+        });
+        const rawCollections = (await collections).rows;
+        const collectionRecordDto = await this.mapCollectionToCollectionDto(rawCollections);
+        return {collections: collectionRecordDto, total: rawCollections.length}
     }
 
     async getCollectionDirectories() {
@@ -101,6 +122,17 @@ export class CollectionService {
             include: { model: CollectionFieldValue }
         })
         return collectionItems;
+    }
+
+    async getSingleCollectionItemById(id: number) {
+        const collectionItem = await this.collectionItemRepository.findOne({
+            where: { id: id },
+            include: [
+                { model: CollectionFieldValue },
+                { model: Collection }
+            ]
+        })
+        return collectionItem;
     }
 
     private async mapCollectionToCollectionDto (collections: Collection[]) {

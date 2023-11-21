@@ -16,6 +16,7 @@ import { GoogleDriveModule } from "./google-drive/google.module";
 import { ThemeModule } from "./theme/theme.module";
 import { Theme } from "./theme/model/theme.model";
 import { Favorites } from "./collection/models/favorite.model";
+import { ProfileModule } from "./profile/profile.module";
 
 @Module({
     imports: [
@@ -52,7 +53,8 @@ import { Favorites } from "./collection/models/favorite.model";
         AuthModule,
         CollectionModule,
         TagModule,
-        ThemeModule
+        ThemeModule,
+        ProfileModule
     ],
     controllers: [],
     providers: []

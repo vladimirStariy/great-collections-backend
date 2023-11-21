@@ -10,7 +10,6 @@ export class JwtUserGuard implements CanActivate {
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const req = context.switchToHttp().getRequest()
-        console.log(req);
         try {
             const authHeader = req.headers.authorization;
             const bearer = authHeader.split(' ')[0]
