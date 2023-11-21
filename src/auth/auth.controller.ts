@@ -35,4 +35,13 @@ export class AuthController {
         });
         return { access: pairTokens.accessToken };
     }
+
+    @Get('logout')
+    async logout(@Res({ passthrough: true }) response: Response) {
+        response.cookie('refreshToken', '', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict'
+        });
+    }
 }

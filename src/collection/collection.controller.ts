@@ -5,6 +5,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { JwtUserGuard } from 'src/auth/guards/jwt.user';
+import { UserGuard } from 'src/auth/guards/user.guard';
 
 
 @Controller('collection')
@@ -39,15 +40,22 @@ export class CollectionController {
         await this.collectionService.createCollectionItem(collectionItemDto);
     }
 
+    @UseGuards(UserGuard)
     @Get('/getCollectionData/:collectionId')
-    async getCollection(@Param('collectionId') collectionId: number) {
-        const response = await this.collectionService.getCollectionById({ id: collectionId });
+    async getCollection(@Req() req: any, @Param('collectionId') collectionId: number) {
+        const response = await this.collectionService.getCollectionById({ id: collectionId }, req.user);
         return response;
     }
 
-    @Post('/collections')
-    async getCollections(@Body() dto: GetCollectionsRequestDto) {
-        const response = await this.collectionService.getCollectionsWithPagination(dto);
+    @Get('getCollectionItem/:collectionItemId')
+    async getCollectionItem(@Param('collectionItemId') collectionItemId: number) {
+        const response = await this.collectionService.getSingleCollectionItemById(collectionItemId);
+        return response;
+    }
+
+    @Get('/collections')
+    async getAllCollections() {
+        const response = await this.collectionService.getAllCollections();
         return response;
     }
 

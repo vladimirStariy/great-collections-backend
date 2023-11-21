@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CollectionService } from 'src/collection/collection.service';
 import { CollectionRecordDto } from 'src/collection/dto/collection.dto';
@@ -9,7 +9,7 @@ import { Favorites } from 'src/collection/models/favorite.model';
 @Injectable()
 export class ProfileService {
 
-    constructor(private favoritesRepository: typeof Favorites,
+    constructor(@InjectModel(Favorites) private favoritesRepository: typeof Favorites,
                 private collectionService: CollectionService) {}
 
     async getUserCollections(userId: number) {
