@@ -30,7 +30,6 @@ export class CollectionController {
         collectionDto.fields.map((item, index) => {
             collectionDto.fields[index] = JSON.parse(String(collectionDto.fields[index]))
         })
-        collectionDto.description = 'test';
         const response = await this.collectionService.createCollection(collectionDto, req.user.userId, file);
         return response;
     }
