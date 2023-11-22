@@ -1,6 +1,7 @@
 import { DataType, Model, Table, Column, HasMany } from "sequelize-typescript";
 import { Collection } from "src/collection/models/collection.model";
 import { Favorites } from "src/collection/models/favorite.model";
+import { Comment } from 'src/comment/model/comment.model';
 
 interface IUserCreationModel {
     email: string;
@@ -28,6 +29,9 @@ export class User extends Model<User, IUserCreationModel> {
 
     @HasMany(() => Favorites)
     likes: Favorites[]
+
+    @HasMany(() => Comment)
+    comments: Comment[]
 
     @HasMany(() => Collection)
     collections: Collection[]

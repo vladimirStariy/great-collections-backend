@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Collection } from './models/collection.model';
-import { CollectionFieldDto, CollectionRecordDto, CreateCollectionItemRequestDto, CreateCollectionRequestDto, GetCollectionRequest, GetCollectionsRequestDto, GetUserCollectionsRequestDto } from './dto/collection.dto';
+import { CollectionFieldAndValueDto, CollectionFieldDto, CollectionRecordDto, CreateCollectionItemRequestDto, CreateCollectionRequestDto, GetCollectionItemResponse, GetCollectionRequest, GetCollectionsRequestDto, GetUserCollectionsRequestDto } from './dto/collection.dto';
 import { CollectionField } from './models/collection.field';
 import { CollectionItem } from './models/collection.item';
 import { CollectionFieldValue, CollectionFieldValueCreationAttributes } from './models/collection.field.value';
@@ -116,9 +116,7 @@ export class CollectionService {
 
     async getCollectionItemById(ids: number[]) {
         const collectionItems = await this.collectionItemRepository.findAll({
-            where: {
-                id: ids
-            },
+            where: { id: ids },
             include: { model: CollectionFieldValue }
         })
         return collectionItems;
@@ -132,7 +130,23 @@ export class CollectionService {
                 { model: Collection }
             ]
         })
-        return collectionItem;
+        const collectionFields = await this.getCollectionFields(collectionItem.collection_id);
+        let collectionFieldsValues: CollectionFieldAndValueDto[] = [];
+        collectionFields.map((field) => {
+            collectionItem.values.map((fieldValue) => {
+                if(fieldValue.collectionFieldId === field.id) {
+                    collectionFieldsValues.push({name: field.name, value: fieldValue.value, data_type: field.data_type})
+                }
+            })
+        }); 
+        let collectionItemDto: GetCollectionItemResponse = {
+            id: collectionItem.id,
+            collection_id: collectionItem.collection_id,
+            name: collectionItem.name,
+            collection: { name: collectionItem.collection.name },
+            collectionFields: collectionFieldsValues
+        }
+        return collectionItemDto;
     }
 
     private async mapCollectionToCollectionDto (collections: Collection[]) {

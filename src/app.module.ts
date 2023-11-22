@@ -17,6 +17,8 @@ import { ThemeModule } from "./theme/theme.module";
 import { Theme } from "./theme/model/theme.model";
 import { Favorites } from "./collection/models/favorite.model";
 import { ProfileModule } from "./profile/profile.module";
+import { Comment } from './comment/model/comment.model'
+import { CommentModule } from "./comment/comment.module";
 
 @Module({
     imports: [
@@ -39,6 +41,7 @@ import { ProfileModule } from "./profile/profile.module";
                 CollectionItemTag, 
                 Tag,
                 Theme,
+                Comment,
                 Favorites
             ],
             autoLoadModels: true
@@ -54,10 +57,11 @@ import { ProfileModule } from "./profile/profile.module";
         CollectionModule,
         TagModule,
         ThemeModule,
-        ProfileModule
+        ProfileModule,
+        CommentModule
     ],
     controllers: [],
-    providers: []
+    providers: [CommentModule]
 })
 
 export class AppModule {}

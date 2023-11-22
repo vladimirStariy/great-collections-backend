@@ -4,6 +4,7 @@ import { Tag } from "src/tag/model/tag.model";
 import { Collection } from "./collection.model";
 import { CollectionFieldValue } from "./collection.field.value";
 import { Favorites } from "./favorite.model";
+import { Comment } from 'src/comment/model/comment.model';
 
 @Table({tableName: 'collection-items'})
 export class CollectionItem extends Model<CollectionItem> {
@@ -26,6 +27,9 @@ export class CollectionItem extends Model<CollectionItem> {
 
     @HasMany(() => Favorites)
     likes: Favorites[]
+
+    @HasMany(() => Comment)
+    comments: Comment[]
 
     @BelongsToMany(() => Tag, () => CollectionItemTag)
     tags: Tag[]
