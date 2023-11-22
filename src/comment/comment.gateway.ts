@@ -13,6 +13,8 @@ import { CreateCommentRequest } from "./dto/comment.dto";
 
 import { UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "src/auth/guards/jwt.guard";
+import { SocketUserGuard } from "src/auth/guards/socket.user.guard";
+import { JwtService } from "@nestjs/jwt";
  
 export interface InitPayload {
     collectionIemId: number;
@@ -23,10 +25,10 @@ export interface InitPayload {
 })
 export class CommentGateway implements OnGatewayConnection, OnGatewayDisconnect {
     
-    constructor(private commentService: CommentService) {}
+    constructor(private jwtService: JwtService,
+                private commentService: CommentService) {}
     
     @WebSocketServer() server: Server;
-
     private connectedClients: Socket[] = [];
  
     handleConnection(client: Socket) {
@@ -37,12 +39,12 @@ export class CommentGateway implements OnGatewayConnection, OnGatewayDisconnect 
       this.connectedClients.splice(this.connectedClients.indexOf(client), 1);
     }
 
-    
     @SubscribeMessage('comment') 
     async handleInitialize(@ConnectedSocket() socket: Socket, @MessageBody() payload: string) {
-        console.log(socket);
-        const token = socket.handshake.headers.authorization.split('Bearer ')[1];
-        console.log(token)
+        let auth_token = socket.handshake.headers.authorization;
+        const token = auth_token.split(' ')[1]
+        const user = this.jwtService.decode(token);
+        console.log(user.email)
         this.connectedClients.forEach(x => {x.emit('comment', payload)})
     }   
 }
