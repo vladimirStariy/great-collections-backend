@@ -6,12 +6,13 @@ import { User } from './models/user.model';
 import { AuthModule } from 'src/auth/auth.module';
 import { Collection } from 'src/collection/models/collection.model';
 import { Favorites } from 'src/collection/models/favorite.model';
+import { Comment } from 'src/comment/model/comment.model';
 
 @Module({
   controllers: [UserController],
   providers: [UserService],
   imports: [
-    SequelizeModule.forFeature([User, Collection, Favorites]),
+    SequelizeModule.forFeature([User, Collection, Favorites, Comment]),
     forwardRef(() => AuthModule)
   ],
   exports: [

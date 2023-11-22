@@ -14,7 +14,6 @@ import { UserModule } from 'src/user/user.module';
 import { Theme } from 'src/theme/model/theme.model';
 import { ThemeModule } from 'src/theme/theme.module';
 import { Favorites } from './models/favorite.model';
-import { ProfileModule } from 'src/profile/profile.module';
 
 @Module({
   controllers: [CollectionController],

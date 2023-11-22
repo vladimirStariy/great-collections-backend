@@ -58,3 +58,19 @@ export interface GetUserCollectionsRequestDto {
     recordsCount: number;
     userId: number;
 }
+
+export interface GetCollectionItemResponse {
+    id: number;
+    collection_id: number;
+    name: string;
+    collection: {
+        name: string;
+    };
+    collectionFields: CollectionFieldAndValueDto[];
+}
+
+export interface CollectionFieldAndValueDto {
+    name: string;
+    value: string;
+    data_type: string;
+}
