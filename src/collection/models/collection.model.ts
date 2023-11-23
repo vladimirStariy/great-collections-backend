@@ -21,7 +21,7 @@ export class Collection extends Model<Collection, ICollectionCreationModel> {
     @Column({type: DataType.STRING, allowNull: false})
     name: string;
     
-    @Column({type: DataType.STRING, allowNull: false})
+    @Column({type: DataType.STRING, allowNull: true})
     description: string;
 
     @Column({type: DataType.STRING, allowNull: true})

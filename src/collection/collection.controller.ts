@@ -61,7 +61,6 @@ export class CollectionController {
 
     @Get('/collection-directories')
     async getCollectionDirectories() {
-        console.log('THATS RIGHT')
         const response = await this.collectionService.getCollectionDirectories();
         return response;
     }
