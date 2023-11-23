@@ -13,4 +13,18 @@ export class ProfileController {
         const collections = await this.profileService.getUserCollections(req.user.userId)
         return collections;
     }
+
+    @UseGuards(JwtAuthGuard) 
+    @Post('/like-item')
+    async likeItem(@Req() req: any, @Body() collectionItemId: number) {
+        await this.profileService.likeCollectionItem(req.user.userId, collectionItemId);
+        return 'ok';
+    }
+
+    @UseGuards(JwtAuthGuard) 
+    @Post('/unlike-item')
+    async unlikeItem(@Req() req: any, @Body() collectionItemId: number) {
+        await this.profileService.unlikeCollectionItem(req.user.userId, collectionItemId);
+        return 'ok';
+    }
 }
