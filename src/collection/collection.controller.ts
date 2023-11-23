@@ -46,9 +46,10 @@ export class CollectionController {
         return response;
     }
 
+    @UseGuards(UserGuard)
     @Get('getCollectionItem/:collectionItemId')
-    async getCollectionItem(@Param('collectionItemId') collectionItemId: number) {
-        const response = await this.collectionService.getSingleCollectionItemById(collectionItemId);
+    async getCollectionItem(@Req() req: any, @Param('collectionItemId') collectionItemId: number) {
+        const response = await this.collectionService.getSingleCollectionItemById(collectionItemId, req.user);
         return response;
     }
 

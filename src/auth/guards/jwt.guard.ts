@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { JwtService } from "@nestjs/jwt";
+import { JsonWebTokenError, JwtService } from "@nestjs/jwt";
 import { UserService } from "src/user/user.service";
 import { ROLES_KEY } from "../roles.decorator";
 
@@ -26,7 +26,7 @@ export class JwtAuthGuard implements CanActivate {
             const valid = this.jwtService.verify(token);
             if(valid) {
                 const user = await this.userService.getByEmail(valid.email);
-                if(user.isBanned) throw new UnauthorizedException({message: 'You are banned'})
+                if(user.isBanned) throw new UnauthorizedException({message: 'Banned'})
                 req.user = {email: user.email, userId: user.id}
                 if (!requiredRoles) {
                     return true;

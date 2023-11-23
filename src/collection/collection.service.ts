@@ -8,6 +8,7 @@ import { CollectionFieldValue, CollectionFieldValueCreationAttributes } from './
 import { GoogleDriveService } from '../google-drive/google.service';
 import { Theme } from 'src/theme/model/theme.model';
 import { UserService } from 'src/user/user.service';
+import { Favorites } from './models/favorite.model';
 
 @Injectable()
 export class CollectionService {
@@ -17,6 +18,7 @@ export class CollectionService {
         @InjectModel(CollectionField) private collectionFieldRepository: typeof CollectionField,
         @InjectModel(CollectionItem) private collectionItemRepository: typeof CollectionItem,
         @InjectModel(CollectionFieldValue) private collectionFieldValuesRepository: typeof CollectionFieldValue,
+        @InjectModel(Favorites) private favoritesRepository: typeof Favorites, 
         @InjectModel(Theme) private themeRepository: typeof Theme,
         private userService: UserService,
         private readonly googleDriveService: GoogleDriveService
@@ -85,6 +87,31 @@ export class CollectionService {
         }
     }
 
+    async getLikes(collectionItemId: number) {
+        const likes = await this.favoritesRepository.findAndCountAll({
+            where: { collectionItemId: collectionItemId }
+        })
+        return likes.count;
+    }
+
+    async likeItem(collectionItemId: number, email: string) {
+        console.log(Number(collectionItemId))
+        const userId = (await this.userService.getByEmail(email)).id;
+        await this.favoritesRepository.create({collectionItemId: collectionItemId, userId: userId});
+    }
+
+    async unlikeItem(collectionItemId: number, email: string) {
+        const userId = (await this.userService.getByEmail(email)).id;
+        await this.favoritesRepository.destroy({where: {collectionItemId: collectionItemId, userId: userId}});
+    }
+
+    async checkLiked(collectionItemId: number, email: string) {
+        const userId = (await this.userService.getByEmail(email)).id;
+        const match = await this.favoritesRepository.findOne({where: {userId: userId, collectionItemId: collectionItemId}})
+        if(match) return true
+        else return false
+    }
+
     async getCollectionsByUserId(userId: number) {
         const rawCollections = await this.collectionRepository.findAll({
             where: {userId: userId},
@@ -110,6 +137,7 @@ export class CollectionService {
             {value: 'VARCHAR', label: 'String'},
             {value: 'BOOLEAN', label: 'Logical'},
             {value: 'BIGTEXT', label: 'Big text'},
+            {value: 'DATE', label: 'Date'}
         ];
         return { themes, types}
     }
@@ -122,7 +150,7 @@ export class CollectionService {
         return collectionItems;
     }
 
-    async getSingleCollectionItemById(id: number) {
+    async getSingleCollectionItemById(id: number, user: {email: string, userId: number} | false) {
         const collectionItem = await this.collectionItemRepository.findOne({
             where: { id: id },
             include: [
@@ -194,7 +222,10 @@ export class CollectionService {
             where: {
                 collection_id: collectionId
             },
-            include: {model: CollectionFieldValue}
+            include: [
+                {model: CollectionFieldValue},
+                {model: Favorites}
+            ]
         })
         return collectionItems;
     }
