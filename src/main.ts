@@ -4,7 +4,7 @@ import { useContainer } from 'class-validator';
 import * as cookieParser from 'cookie-parser';
 
 async function start() {
-    const PORT = '5000';
+    const PORT = '3000';
     const app = await NestFactory.create(AppModule);
 
     const bodyparser = require('body-parser');
