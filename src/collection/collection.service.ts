@@ -70,6 +70,7 @@ export class CollectionService {
         await this.createItemTags(arr, created.id)
     }
     
+    
     async getBiggestCollections(count: number) {
         const _collections = await this.collectionRepository.findAll({
             include: { model: CollectionItem }
