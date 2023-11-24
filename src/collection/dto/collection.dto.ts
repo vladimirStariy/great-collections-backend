@@ -1,3 +1,5 @@
+import { Tag } from "src/tag/dto/tag.dto";
+
 export interface CreateCollectionRequestDto {
     name: string;
     description?: string;
@@ -43,7 +45,7 @@ export interface CollectionFieldDto {
 
 export interface CreateCollectionItemRequestDto {
     name: string;
-    tags: number[];
+    tags: Tag[];
     collectionId: number;
     values: any[];
 }

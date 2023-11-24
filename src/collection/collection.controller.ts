@@ -53,6 +53,18 @@ export class CollectionController {
         return response;
     }
 
+    @Get('/biggestCollections/:count')
+    async getBiggetCollections(@Param('count') count: number) {
+        const response = await this.collectionService.getBiggestCollections(count);
+        return response;
+    }
+
+    @Get('/newCollectionItems/:count')
+    async getNewCollectionItems(@Param('count') count: number) {
+        const response = await this.collectionService.getLastCollectionItems(count);
+        return {itemCards: response};
+    }
+
     @Get('/collections')
     async getAllCollections() {
         const response = await this.collectionService.getAllCollections();
