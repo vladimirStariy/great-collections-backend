@@ -10,7 +10,7 @@ async function start() {
     
     app.enableCors({
         origin: 'https://great-collections-front.vercel.app',
-        allowedHeaders: '*',
+        allowedHeaders: ['content-type', 'authorization'],
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
         preflightContinue: false,
         optionsSuccessStatus: 204,
