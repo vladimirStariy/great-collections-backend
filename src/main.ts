@@ -16,7 +16,6 @@ async function start() {
 
     app.enableCors({
         origin: ['https://great-collections-front.vercel.app', '*'],
-        preflightContinue: true,
         credentials: true,
     });
 
