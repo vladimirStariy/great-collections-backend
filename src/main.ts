@@ -15,10 +15,11 @@ async function start() {
     );
 
     app.enableCors({
-        origin: true,
-        
         credentials: true,
+        origin: ['https://great-collections-front.vercel.app'],
     });
+
+    
 
     useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
