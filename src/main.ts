@@ -7,7 +7,16 @@ const cors = require('cors')
 async function start() {
     const PORT = '3000';
     const app = await NestFactory.create(AppModule);
-
+    
+    app.enableCors({
+        origin: 'https://great-collections-front.vercel.app',
+        allowedHeaders: ['content-type'],
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+        preflightContinue: false,
+        optionsSuccessStatus: 204,
+        credentials: true,
+    })
+    
     const bodyparser = require('body-parser');
 
     app.use(
@@ -15,14 +24,9 @@ async function start() {
         bodyparser.urlencoded({ limit: '50mb', extended: false })
     );
 
-    app.use(cors({
-        origin: ['https://great-collections-front.vercel.app'],
-        credentials: true,
-    }))
-
     useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
-    await app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
+    await app.listen(PORT)
 }
 
 start();
