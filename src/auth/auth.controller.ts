@@ -31,7 +31,7 @@ export class AuthController {
         response.cookie('refreshToken', pairTokens.refreshToken, {
             httpOnly: true,
             secure: true,
-            sameSite: 'lax'
+            sameSite: 'none'
         });
         return { access: pairTokens.accessToken };
     }
@@ -41,7 +41,7 @@ export class AuthController {
         response.cookie('refreshToken', '', {
             httpOnly: true,
             secure: true,
-            sameSite: 'lax'
+            sameSite: 'none'
         });
     }
 }
