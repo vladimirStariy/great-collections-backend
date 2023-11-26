@@ -9,7 +9,7 @@ async function start() {
     const app = await NestFactory.create(AppModule);
     
     app.enableCors({
-        origin: 'https://great-collections-front.vercel.app',
+        origin: true,
         allowedHeaders: ['content-type', 'authorization'],
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
         preflightContinue: false,
