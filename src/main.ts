@@ -2,6 +2,7 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { useContainer } from 'class-validator';
 import * as cookieParser from 'cookie-parser';
+const cors = require('cors')
 
 async function start() {
     const PORT = '3000';
@@ -14,12 +15,10 @@ async function start() {
         bodyparser.urlencoded({ limit: '50mb', extended: false })
     );
 
-    app.enableCors({
-        credentials: true,
+    app.use(cors({
         origin: ['https://great-collections-front.vercel.app'],
-    });
-
-    
+        credentials: true,
+    }))
 
     useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
