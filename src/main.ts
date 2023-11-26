@@ -3,6 +3,7 @@ import { AppModule } from "./app.module";
 import { useContainer } from 'class-validator';
 import * as cookieParser from 'cookie-parser';
 const cors = require('cors')
+const bodyparser = require('body-parser');
 
 async function start() {
     const PORT = '3000';
@@ -16,8 +17,6 @@ async function start() {
         optionsSuccessStatus: 204,
         credentials: true,
     })
-    
-    const bodyparser = require('body-parser');
 
     app.use(
         cookieParser(),
