@@ -15,7 +15,7 @@ export class AuthController {
         response.cookie('refreshToken', pairTokens.refreshToken, {
             httpOnly: true,
             secure: true,
-            sameSite: 'strict'
+            sameSite: 'none'
         });
         return { access: pairTokens.accessToken };
     }
