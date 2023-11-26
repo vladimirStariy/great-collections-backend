@@ -2,7 +2,6 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { useContainer } from 'class-validator';
 import * as cookieParser from 'cookie-parser';
-const cors = require('cors')
 const bodyparser = require('body-parser');
 
 async function start() {
@@ -22,8 +21,6 @@ async function start() {
         cookieParser(),
         bodyparser.urlencoded({ limit: '50mb', extended: false })
     );
-
-    useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
     await app.listen(PORT)
 }
