@@ -1,9 +1,6 @@
-import { HttpException, HttpStatus, Inject, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CollectionService } from 'src/collection/collection.service';
-import { CollectionRecordDto } from 'src/collection/dto/collection.dto';
-import { CollectionItem } from 'src/collection/models/collection.item';
-import { Collection } from 'src/collection/models/collection.model';
 import { Favorites } from 'src/collection/models/favorite.model';
 
 @Injectable()

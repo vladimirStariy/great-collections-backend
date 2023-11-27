@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get } from '@nestjs/common';
 import { TagService } from './tag.service';
 import { CreateTagRequest } from './dto/tag.dto';
 

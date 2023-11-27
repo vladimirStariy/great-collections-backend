@@ -1,4 +1,4 @@
-import { HttpException, ConflictException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserDto } from 'src/user/dto/user.dto';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from "@nestjs/jwt";
@@ -14,7 +14,6 @@ export class AuthService {
     async login(userDto: UserDto) {
         const user = await this.validateUser(userDto);
         const pairTokens = await this.generatePairToken(user);
-
         return pairTokens;
     }
 
@@ -30,7 +29,6 @@ export class AuthService {
         if(isValid) {
             const user = await this.userService.getByEmail(isValid.email);
             const pairTokens = this.generatePairToken(user);
-
             return pairTokens;
         }
     }
@@ -39,7 +37,6 @@ export class AuthService {
         const payload = { email: user.email, isAdmin: user.isAdmin }
         const accessToken = await this.jwtService.signAsync(payload, {algorithm: 'HS256'})
         const refreshToken = await this.jwtService.signAsync(payload, {algorithm: 'HS256', expiresIn: '7d'})
-        
         return { accessToken, refreshToken }
     }
 

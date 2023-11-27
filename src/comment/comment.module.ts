@@ -1,7 +1,6 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { SequelizeModule } from "@nestjs/sequelize";
 import { Comment } from './model/comment.model';
-import { CommentController } from './comment.controller';
 import { CommentService } from './comment.service';
 import { CommentGateway } from './comment.gateway';
 import { CollectionItem } from 'src/collection/models/collection.item';
@@ -17,7 +16,7 @@ import { Collection } from 'src/collection/models/collection.model';
       forwardRef(() => AuthModule),
       SequelizeModule.forFeature([Comment, Collection, CollectionItem]),
     ],
-    controllers: [CommentController],
+    controllers: [],
     providers: [CommentGateway, CommentService],
     
 })

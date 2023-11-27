@@ -2,7 +2,6 @@ import { Res, Req, Body, Controller, Delete, Get, Param, Post, UseGuards, UsePip
 import { Request, Response } from 'express'
 import { AuthService } from './auth.service';
 import { AuthDto, RegisterDto } from './dto/auth.dto';
-import { UserDto } from 'src/user/dto/user.dto';
 
 @Controller('')
 export class AuthController {

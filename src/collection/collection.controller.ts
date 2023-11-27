@@ -4,7 +4,6 @@ import { CreateCollectionItemRequestDto, CreateCollectionRequestDto, GetCollecti
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { JwtUserGuard } from 'src/auth/guards/jwt.user';
 import { UserGuard } from 'src/auth/guards/user.guard';
 
 
@@ -75,10 +74,5 @@ export class CollectionController {
     async getCollectionDirectories() {
         const response = await this.collectionService.getCollectionDirectories();
         return response;
-    }
-
-    @Delete('/delete-collection')
-    async deleteCollection() {
-        
     }
 }
