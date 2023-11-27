@@ -8,13 +8,7 @@ import { WebSocketGateway,
 } from "@nestjs/websockets";
 import { Socket, Server } from 'socket.io'
 import { CommentService } from "./comment.service";
-
-import { CreateCommentRequest } from "./dto/comment.dto";
-
-import { UseGuards } from "@nestjs/common";
-import { JwtAuthGuard } from "src/auth/guards/jwt.guard";
-import { SocketUserGuard } from "src/auth/guards/socket.user.guard";
-import { JsonWebTokenError, JwtService, TokenExpiredError } from "@nestjs/jwt";
+import { JwtService } from "@nestjs/jwt";
 import { UserService } from "src/user/user.service";
 import { CollectionService } from "src/collection/collection.service";
  

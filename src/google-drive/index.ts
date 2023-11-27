@@ -4,8 +4,8 @@ import { GoogleDriveConfigType } from './types/types';
 import { GOOGLE_DRIVE_CONFIG } from './google.constants';
 
 export {
-  GoogleDriveModule,
-  GoogleDriveService,
-  GOOGLE_DRIVE_CONFIG,
-  GoogleDriveConfigType,
+    GoogleDriveModule,
+    GoogleDriveService,
+    GOOGLE_DRIVE_CONFIG,
+    GoogleDriveConfigType,
 };

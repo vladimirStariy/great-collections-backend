@@ -47,10 +47,10 @@ import { CommentModule } from "./comment/comment.module";
             autoLoadModels: true
         }),
         GoogleDriveModule.register({
-            clientId: '593131673474-b5lnt6kfvhvb3758n88ncfkm1pb79gv7.apps.googleusercontent.com',
-            clientSecret: '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',
-            redirectUrl: 'https://developers.google.com/oauthplayground',
-            refreshToken: '1//0408XWH79EkOcCgYIARAAGAQSNwF-L9IrjrrWQj8yCM1bkCBAkG6bgUZ_ttP7QYgpiwevRWim1alRGjfFkP7odO13T0XYznPf84Q',
+            clientId: process.env.GOOGLE_DRIVE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_DRIVE_CLIENT_SECRET,
+            redirectUrl: process.env.GOOGLE_DRIVE_REDIRECT_URL,
+            refreshToken: process.env.GOOGLE_DRIVE_REFRESH_TOKEN,
         }),
         UserModule,
         AuthModule,

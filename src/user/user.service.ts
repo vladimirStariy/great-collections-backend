@@ -1,7 +1,7 @@
-import { HttpException, HttpStatus, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './models/user.model';
-import { UserDto, UserRecordDto, UsersRequestDto } from './dto/user.dto';
+import { UserRecordDto, UsersRequestDto } from './dto/user.dto';
 
 @Injectable()
 export class UserService {
@@ -63,14 +63,6 @@ export class UserService {
     async removeUserRange(userIds: number[]) {
         const res = await this.userRepository.destroy({where: { id: userIds }})
         return res;
-    }
-
-    async grantAdminPrivilegies() {
-
-    }
-
-    async removeAdminPrivilegies() {
-
     }
 }
 
